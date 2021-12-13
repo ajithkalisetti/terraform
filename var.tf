@@ -7,8 +7,8 @@ terraform {
   }
 }
 variable "ip" {
-type = string
-  cidr_block = "190.10.0.0/20"
+  type = string
+  default = "190.10.0.0/20"
 }
 
 provider "aws" {
@@ -17,15 +17,13 @@ provider "aws" {
 
 resource "aws_vpc" "main" {
   cidr_block = "190.10.0.0/16"
-
-
   tags = {
-    Name = 'Thala'
+    Name = "Thala"
   }
 }
 resource "aws_subnet" "subnet1" {
   vpc_id     = "${aws_vpc.main.id}"
-  cidr_block = var.ip
+  cidr_block = "${var.ip}"
 
 
   tags = {
