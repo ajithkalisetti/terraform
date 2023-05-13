@@ -17,3 +17,13 @@ variable "vnet_location" {
   type        = string
   description = "Location of the VNet"
 }
+
+variable "vm_name" {
+  type        = string
+  description = "Name of the Virtual Machine"
+}
+
+variable "subnet_name" {
+  type        = string
+  description = "Name of the SubNet"
+}
