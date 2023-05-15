@@ -25,7 +25,7 @@ resource "azurerm_resource_group" "rg" {
 resource "azurerm_virtual_network" "vnet" {
 
     name = var.vnet_name
-    location = var.vnet_location
+    location = var.vm_location
     address_space = ["193.0.0.0/16"]
     resource_group_name = azurerm_resource_group.rg.name
   
@@ -39,15 +39,36 @@ resource "azurerm_subnet" "Subnet1" {
    virtual_network_name = azurerm_virtual_network.vnet
 }
 # Create a Public IP for VM
-resource "azurerm_public_ip" "Public IP" {
+resource "azurerm_public_ip" "Public_IP" {
   name = "${var.vm_name}-IP"
   allocation_method = "Dynamic"
-  location = var.vnet_location
+  location = var.vm_location
   resource_group_name = azurerm_resource_group.rg
 }
 # Create a NIC for VM
-resource "azurerm_network_interface" "Network Interface" {
+resource "azurerm_network_interface" "Network_Interface" {
   name = "${var.vm_name}-NIC"
   resource_group_name = azurerm_resource_group.rg
-  location = var.vnet_location
+  location = var.vm_location
+  ip_configuration {
+    name = "${var.vm_name}-IPConfiguration"
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id = azurerm_public_ip.Public_IP
+    subnet_id = azurerm_subnet.Subnet1
+  }
+}
+# Create Virtual Machine
+resource "azurerm_virtual_machine" "vm" {
+    name = var.vm_name
+    location = var.vm_location
+    resource_group_name = azurerm_resource_group.rg
+    network_interface_ids = azurerm_network_interface.Network_Interface
+    vm_size = var.vm_size
+    storage_image_reference {
+      publisher = "Canonical"
+      offer = "UbuntuServer"
+      sku = "18.04-LTS"
+      version = "latest"
+    }
+  
 }

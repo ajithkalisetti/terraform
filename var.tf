@@ -13,9 +13,9 @@ variable "vnet_name" {
   description = "Name of the VNet"
 }
 
-variable "vnet_location" {
+variable "vm_location" {
   type        = string
-  description = "Location of the VNet"
+  description = "Location of the VM"
 }
 
 variable "vm_name" {
@@ -26,4 +26,8 @@ variable "vm_name" {
 variable "subnet_name" {
   type        = string
   description = "Name of the SubNet"
+}
+variable "vm_size" {
+  type        = string
+  description = "Specify size of the VM (EX: B2s/B2ms/B4ms)"
 }
